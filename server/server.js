@@ -1,5 +1,6 @@
 const express = require("express");
 const http = require("http");
+const path = require("path");
 const WebSocket = require("ws");
 const server = require("http").createServer();
 const app = express();
@@ -37,6 +38,11 @@ WebsocketServer.on("connection", function connection(ws, req) {
   ws.on("error", console.warn);
 });
 
+app.use(express.static(path.join(__dirname, "../build")));
+
+app.get("*", (request, result) => {
+  result.sendFile(path.join(__dirname, "../build/index.html"));
+});
 
 server.on("request", app);
 server.listen(8080, function listening() {
