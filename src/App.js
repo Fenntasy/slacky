@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import "./App.css";
 import Login from "./Login";
 import Chat from "./Chat";
+import { Redirect, Route, Switch } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userName: null,
+      channels: ["general", "random"],
       messages: [],
     };
     // Attaching the websocket to our App so we can reuse it
@@ -39,12 +41,13 @@ class App extends Component {
     );
   };
 
-  sendMessage = message => {
+  sendMessage = (message, channel) => {
     this.websocket.send(
       JSON.stringify({
         type: "NEW_MESSAGE",
         userName: this.state.userName,
-        message: message
+        message: message,
+        channel: channel
       })
     );
   };
@@ -56,10 +59,23 @@ class App extends Component {
           <h1 className="App-title">Slacky</h1>
         </header>
 
-        {this.state.userName
-          ? (<Chat sendMessage={this.sendMessage} messages={this.state.messages} />
-          )
-          : (<Login handleUserName={this.handleUserName} />)}
+        <Switch>
+          <Route path="/chat" render={(routerProps) =>
+            this.state.userName
+              ? <Chat
+                  {...routerProps}
+                  sendMessage={this.sendMessage}
+                  messages={this.state.messages}
+                  channels={this.state.channels}
+                />
+              : <Redirect to="/"/>
+          } />
+          <Route render={() =>
+            this.state.userName
+              ? <Redirect to="/chat"/>
+              : <Login handleUserName={this.handleUserName} />
+          } />
+        </Switch>
       </div>
     );
   }

@@ -1,62 +1,35 @@
 import React, { Component } from "react";
+import { NavLink, Route } from "react-router-dom";
+import Channel from "./Channel"
 
 class Chat extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      newMessage: ""
-    };
-  }
-
-  handleChange = event => {
-    this.setState({ newMessage: event.target.value });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.props.sendMessage(this.state.newMessage);
-    this.setState({ newMessage: "" });
-  };
-
-  componentDidUpdate() {
-    // https://reactjs.org/docs/react-component.html#componentdidupdate
-    // This will make the list of messages scroll to the bottom each time
-    // the component update, that way, the last message will always be visible
-    this.messageListDiv.scrollTop = this.messageListDiv.scrollHeight;
-  }
-
   render() {
     return (
       <div className="Chat">
-        <div
-          className="Chat-messages"
-          ref={(node) => {
-            // refs allows you to have a reference to an element of the DOM
-            // You should use this parcimoniously and don't change the DOM or React
-            // will go crazy
-            // See https://reactjs.org/docs/refs-and-the-dom.html
-            this.messageListDiv = node;
-          }}
-        >
-          {this.props.messages.map((message, index) =>
-            (
-              <div className="message-container" key={index}>
-                <span className="author">{message.userName}</span>
-                <span className="message">{message.message}</span>
-              </div>
-            )
-          )}
+        <div className="Channels">
+          {this.props.channels.map((channel, index) => (
+            <NavLink
+              key={index}
+              to={`${this.props.match.url}/${channel}`}
+            >
+              {channel}
+            </NavLink>
+          ))}
         </div>
-        <div className="Chat-form">
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              value={this.state.newMessage}
-              onChange={this.handleChange}
+
+        <Route path={`${this.props.match.url}/:channel`} render={routerProps => (
+            <Channel
+              sendMessage={this.props.sendMessage}
+              messages={this.props.messages}
+              channel={routerProps.match.params.channel}
             />
-            <button type="submit">Send</button>
-          </form>
-        </div>
+          )}
+        />
+        <Route exact path={this.props.match.url} render={() => (
+          <div className="Channel">
+            <h3>Please select a channel.</h3>
+          </div>
+        )} />
       </div>
     );
   }

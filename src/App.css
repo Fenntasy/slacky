@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body, #root {
   height: 100%;
 }
@@ -19,7 +23,7 @@ html, body, #root {
 
 .App-header {
   background-color: #222;
-  height: 50px;
+  height: 100px;
   padding: 20px;
   color: white;
 }
@@ -48,9 +52,34 @@ html, body, #root {
 .Chat {
   flex: 2 1;
   display:flex;
+  flex-flow: row;
+  max-height: calc(100vh - 100px)
+}
+
+.Channels {
+  flex: 1 1 70px;
+  display: flex;
+  flex-flow: column;
+  border-right: 1px solid #ccc;
+}
+
+.Channels a {
+  text-align: center;
+  color: black;
+  padding: 5px;
+  text-decoration: none;
+}
+
+.Channels a.active {
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.Channel {
+  flex: 5 1;
+  display:flex;
   flex-flow: column;
   justify-content: space-between;
-  padding-top: 5px;
   align-items: stretch;
   align-content: stretch;
   max-height: calc(100vh - 50px)
