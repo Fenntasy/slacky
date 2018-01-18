@@ -1,17 +1,8 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { sendMessageToWS } from "./websocket"
 
 class Channel extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      newMessage: ""
-    };
-  }
-
-  handleChange = event => {
-    this.setState({ newMessage: event.target.value });
-  };
-
   componentDidUpdate() {
     // https://reactjs.org/docs/react-component.html#componentdidupdate
     // This will make the list of messages scroll to the bottom each time
@@ -21,8 +12,8 @@ class Channel extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.sendMessage(this.state.newMessage, this.props.channel);
-    this.setState({ newMessage: "" });
+    sendMessageToWS(this.props.chatMessageValue, this.props.channel);
+    this.props.sendMessage();
   };
 
   render() {
@@ -53,8 +44,8 @@ class Channel extends Component {
           <form onSubmit={this.handleSubmit}>
             <input
               type="text"
-              value={this.state.newMessage}
-              onChange={this.handleChange}
+              value={this.props.chatMessageValue}
+              onChange={this.props.updateChatMessageValue}
             />
             <button type="submit">Send</button>
           </form>
@@ -64,4 +55,24 @@ class Channel extends Component {
   }
 }
 
-export default Channel;
+function mapStateToProps(state) {
+  return {
+    chatMessageValue: state.chatMessageValue,
+    messages: state.messages,
+  }
+}
+
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateChatMessageValue: (event) => dispatch({
+      type: "UPDATE_CHAT_INPUT_VALUE",
+      value: event.target.value
+    }),
+    sendMessage: () => dispatch({
+      type: "SEND_MESSAGE"
+    })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Channel);

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink, Route } from "react-router-dom";
+import { connect } from "react-redux";
 import Channel from "./Channel"
 
 class Chat extends Component {
@@ -19,8 +20,6 @@ class Chat extends Component {
 
         <Route path={`${this.props.match.url}/:channel`} render={routerProps => (
             <Channel
-              sendMessage={this.props.sendMessage}
-              messages={this.props.messages}
               channel={routerProps.match.params.channel}
             />
           )}
@@ -35,4 +34,10 @@ class Chat extends Component {
   }
 }
 
-export default Chat;
+function mapStateToProps(state) {
+  return {
+    channels: state.channels
+  }
+}
+
+export default connect(mapStateToProps)(Chat);
