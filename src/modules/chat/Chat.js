@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { sendMessageToWS } from "./websocket"
+import { sendMessageToWS } from "../../utils/websocket"
+import { getChatMessages } from "../../store/chat/selectors"
+import { chatActions } from "../../store/chat/actions"
 
 class Chat extends Component {
   handleSubmit = (event) => {
@@ -53,24 +55,4 @@ class Chat extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    chatMessageValue: state.chatMessageValue,
-    messages: state.messages
-  }
-}
-
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateChatMessageValue: (event) => dispatch({
-      type: "UPDATE_CHAT_INPUT_VALUE",
-      value: event.target.value
-    }),
-    sendMessage: () => dispatch({
-      type: "SEND_MESSAGE"
-    })
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default connect(getChatMessages, chatActions)(Chat);

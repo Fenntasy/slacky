@@ -1,4 +1,4 @@
-import store from "./store";
+import store from "../store/store";
 
 // Attaching the websocket to our App so we can reuse it
 let websocket;

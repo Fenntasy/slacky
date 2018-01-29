@@ -1,4 +1,3 @@
-import { createStore } from "redux";
 
 const initialState = {
   userName: null,
@@ -7,7 +6,7 @@ const initialState = {
   chatMessageValue: ""
 }
 
-function slacky(state = initialState, action) {
+export default function slacky(state = initialState, action) {
   switch(action.type) {
     case "UPDATE_LOGIN_INPUT_VALUE":
       return {
@@ -39,7 +38,3 @@ function slacky(state = initialState, action) {
       return state;
   }
 }
-
-let store = createStore(slacky);
-
-export default store;

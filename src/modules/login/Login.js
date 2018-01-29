@@ -1,6 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { connectWebsocket } from "./websocket"
+import { connectWebsocket } from "../../utils/websocket"
+import { getLoginInputValue } from "../../store/chat/selectors"
+import { loginActions } from "../../store/chat/actions"
 
 function Login(props) {
   return (
@@ -22,26 +24,7 @@ function Login(props) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    loginInputValue: state.loginInputValue
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateLoginInputValue: (event) => dispatch({
-      type: "UPDATE_LOGIN_INPUT_VALUE",
-      value: event.target.value
-    }),
-    login: (userName) => dispatch({
-      type: "LOGIN",
-      userName: userName
-    })
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(getLoginInputValue, loginActions)(Login);
 
 // <Connect handleUserName={funct} loginInputValue updateLoginInputValue  >
 //   <Login handleUserName={funct} loginInputValue updateLoginInputValue />

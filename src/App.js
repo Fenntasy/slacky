@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
-import Login from "./Login";
-import Chat from "./Chat";
+import Login from "./modules/login/Login";
+import Chat from "./modules/chat/Chat";
 import { connect } from "react-redux";
-import { init } from "./websocket"
+import { init } from "./utils/websocket"
 
 class App extends Component {
   componentDidMount() {
